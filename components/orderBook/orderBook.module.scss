@@ -1,0 +1,113 @@
+$greenBackground:#123534;
+$redBackground:#3d1e28;
+
+$greenText:#109165;
+$redText:#c23437;
+
+$greyText:#484d5b;
+
+.orderBookContainer{
+    background-color: #131723;
+    color:rgba(186,186,186,1.00);
+    font-family: Iosevka Custom,monospace;
+    text-align: center;
+    min-width: 500px;
+    height:100vw;
+}
+
+.orderBookHeader{
+    min-width: 300px;
+    font-weight: bold;
+    color: $greyText;
+    border-top: 2px solid $greyText;
+    border-bottom: 1px solid $greyText;
+}
+
+.orderBookRow{
+    height: 18px;
+    position: relative;
+    z-index: 2;
+    min-width: 300px;
+}
+
+.quantity{
+    text-align: right;
+    z-index: 2;
+}
+
+.price{
+    &.green{
+        color:$greenText;
+    }
+    &.red{
+        color:$redText;
+    }
+    font-weight: bold;
+    text-align: left;
+    position: relative;
+    z-index: 2;
+}
+
+.spreadRow{
+
+}
+
+.spread{
+    color:#484d5b;
+    border-top: 1px solid $greyText;
+    border-bottom: 1px solid $greyText;
+    height: 30px;
+}
+
+.noConnection{
+    color:#484d5b;
+    border-top: 1px solid $greyText;
+    border-bottom: 1px solid $greyText;
+    height: 30px;
+}
+
+.orderRowBackground{
+    z-index: 1;
+    position: relative;
+    top: -21px;
+    height: 18px;
+}
+
+.redRow{
+    background: $redBackground;
+}
+
+.greenRow{
+    background: $greenBackground;
+}
+
+.settingsLabel{
+    text-align: right;
+}
+
+.settingsInput{
+    text-align: left;
+}
+
+.toggleButton{
+    background-color:#5D45DC;
+    border:0;
+    -webkit-transition: opacity 0.15s ease-in-out;
+    -moz-transition: opacity 0.15s ease-in-out;
+    -ms-transition: opacity 0.15s ease-in-out;
+    -o-transition: opacity 0.15s ease-in-out;
+    transition: opacity 0.15s ease-in-out;
+    opacity: 1;
+
+    &:hover{
+        border:0;
+        background-color:#5D45DC;
+        opacity: 0.8;
+    }
+
+    &:focus{
+        border:0;
+        background-color:#5D45DC;
+        opacity: 0.8;
+    }
+}
