@@ -1,4 +1,4 @@
-import { OrderType } from "./enums";
+import { OrderType } from "./OrderType";
 
 class Order {
     type: OrderType;

@@ -1,4 +1,5 @@
 import Order from "./models/Order";
+import Spread from "./models/Spread";
 
 const addCumulativeVolumes = (orderList: Order[], ascendingOrder: boolean, listDepth: number) => {
     if (!orderList.length)
@@ -27,15 +28,15 @@ const addVolumePercentage = (orderList: Order[], biggestCumulativeVolume: number
     return orderList;
 }
 
-const calculateSpreadInfo = (asks: Order[], bids: Order[]) => {
+const calculateSpreadInfo = (asks: Order[], bids: Order[]): Spread => {
     if (!asks.length || !bids.length)
-        return { amount: 0, percent: 0 };
+        return new Spread(0, 0);
 
     const lowestAsk = asks[asks.length - 1].price;
     const highestBid = bids[0].price;
     let amount = Math.round((lowestAsk - highestBid) * 10000) / 10000;
     let percent = Math.round((amount / highestBid * 100) * 100) / 100;
-    return { amount, percent };
+    return new Spread(amount, percent);
 }
 
 export { addCumulativeVolumes, addVolumePercentage, calculateSpreadInfo };

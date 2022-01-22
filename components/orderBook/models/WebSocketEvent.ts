@@ -1,4 +1,4 @@
-class WebSockerEvent {
+class WebSocketEvent {
     event: string;
     feed: string = "book_ui_1";
     product_ids: string[];
@@ -13,4 +13,4 @@ class WebSockerEvent {
     }
 }
 
-export default WebSockerEvent;
+export default WebSocketEvent;

@@ -1,7 +1,8 @@
 import { useState, useEffect, SetStateAction } from 'react';
 import Order from '../models/Order';
-import { OrderType } from '../models/enums';
-import OrderBookWebSocket from './orderBookWebSocket';
+import OrderType from '../models/OrderType';
+import Constants from '../Constants';
+import OrderBookWebSocket from './OrderBookWebSocket';
 export const isBrowser = typeof window !== "undefined";
 
 const addOrdersToList = (orders: Order[], setList: { (value: SetStateAction<Order[]>): void; (value: SetStateAction<Order[]>): void; (arg0: (existingOrders: Order[]) => Order[]): void; }, renewList: boolean) => {
@@ -47,7 +48,7 @@ export default function useOrderBookWebSocket() {
                 }
         };
 
-        const obws = new OrderBookWebSocket("wss://www.cryptofacilities.com/ws/v1", pair, onMessageHandler);
+        const obws = new OrderBookWebSocket(Constants.WEBSOCKET_URL, pair, onMessageHandler);
 
         window.onfocus = () => obws.init();
         window.onblur = () => obws.close();

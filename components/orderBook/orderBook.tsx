@@ -1,10 +1,12 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Row, Col, Container, Button } from 'react-bootstrap';
-import styles from './orderBook.module.scss'
+import { useState, useMemo } from 'react';
+import { Row, Col, Container } from 'react-bootstrap';
+import styles from './OrderBook.module.scss'
 
-import OrderRow from './orderRow';
-import OrderBookSettings from './orderBookSettings';
-import OrderBookHeader from './orderBookHeader';
+import OrderRow from './subcomponents/OrderRow';
+import OrderBookSettings from './subcomponents/OrderBookSettings';
+import OrderBookHeader from './subcomponents/OrderBookHeader';
+import FeedToggle from './subcomponents/FeedToggle';
+
 import Order from './models/Order';
 
 import { orderByPropertyNameDesc } from '../../tools/orderBy';
@@ -12,6 +14,7 @@ import { addCumulativeVolumes, addVolumePercentage, calculateSpreadInfo } from '
 
 import useOrderBookWebSocket from './hooks/useOrderBookWebSocket';
 import useThrottleTick from './hooks/useThrottleTick';
+import OrderType from './models/OrderType';
 
 export default function OrderBook() {
   const [depth, setDepth] = useState<number>(15);
@@ -22,13 +25,10 @@ export default function OrderBook() {
 
   const throttledOrderBookRows = useMemo(
     () => {
-      let hasData = false;
       if (!asks.length && !bids.length)
-        return [hasData, <Row>
+        return <Row>
           <Col className={styles.noConnection}>No websocket connection</Col>
-        </Row>];
-
-      hasData = true;
+        </Row>;
 
       const composeOrderRows = () => {
         //order and take depth
@@ -42,7 +42,7 @@ export default function OrderBook() {
         const asksWithVolumes = addCumulativeVolumes(asksToShow, false, depth);
         const bidsWithVolumes = addCumulativeVolumes(bidsToShow, true, depth);
 
-        //get the biggest cumulative volume == 100%
+        //get the biggest cumulative volume to define 100%
         const biggestVolume = asksWithVolumes.length && bidsWithVolumes.length ? (asksWithVolumes[0].cumulativeVolume > bidsWithVolumes[bidsWithVolumes.length - 1].cumulativeVolume ?
           asksWithVolumes[0].cumulativeVolume :
           bidsWithVolumes[bidsWithVolumes.length - 1].cumulativeVolume) : 0;
@@ -55,9 +55,9 @@ export default function OrderBook() {
         const mapToOrderRow = (o: Order) =>
           <OrderRow
             key={o.price}
-            price={o.price}
-            quantity={o.quantity}
-            cumulativeVolume={o.cumulativeVolume}
+            price={o.price.toFixed(2).toLocaleString()}
+            quantity={o.quantity.toLocaleString()}
+            cumulativeVolume={o.cumulativeVolume.toLocaleString()}
             volumePercentage={o.volumePercentage}
             type={o.type} />;
 
@@ -69,13 +69,30 @@ export default function OrderBook() {
 
       const { askComponents, bidComponents, spread } = composeOrderRows();
 
-      return [hasData, <>
-        {askComponents}
-        <Row>
-          <Col className={styles.spread}>Spread: {spread.amount} ({spread.percent}%)</Col>
-        </Row>
-        {bidComponents}
-      </>];
+      return <Row>
+        <Col
+          xs={{ span: 12, order: 1 }}
+          md={{ span: 6, order: 3 }}>
+          <OrderBookHeader type={OrderType.ask} />
+          <div className={styles.responsiveAskRows}>
+            {askComponents}
+          </div>
+        </Col>
+        <Col
+          xs={{ span: 12, order: 2 }}
+          md={{ span: 12, order: 1 }}
+          className={`${styles.spread} text-center`}>
+          Spread: {spread.amount.toFixed(1)} ({spread.percent}%)
+        </Col>
+        <Col
+          xs={{ span: 12, order: 3 }}
+          md={{ span: 6, order: 2 }}>
+          <OrderBookHeader type={OrderType.bid} />
+          <div className="d-flex flex-column">
+            {bidComponents}
+          </div>
+        </Col>
+      </Row>;
     },
     [throttleTick]
   );
@@ -83,12 +100,11 @@ export default function OrderBook() {
   return (
     <Container className={styles.orderBookContainer}>
       <Row>
-        <Col style={{}}>
+        <Col>
           <h2>{pair.substring(3)}</h2>
         </Col>
       </Row>
       <Row>
-        <Col />
         <Col>
           <OrderBookSettings
             depth={depth}
@@ -97,32 +113,25 @@ export default function OrderBook() {
             setRenderThrottleInterval={setRenderThrottleInterval}
           />
         </Col>
-        <Col />
+      </Row>
+      <hr />
+      <br />
+      <Row>
+        <div className={styles.orderBookTitle}>
+          Order book
+        </div>
       </Row>
       <Row>
-        <Col>
-          <br />
-        </Col>
-      </Row>
-      <Row>
-        <Col />
         <Col >
-          {throttledOrderBookRows[0] ? <OrderBookHeader /> : ''}
-          {throttledOrderBookRows[1]}
+          {throttledOrderBookRows}
         </Col>
-        <Col />
       </Row>
+      <br />
       <Row>
         <Col>
-          <br />
-          <Button
-            className={styles.toggleButton}
-            onClick={handleFeedToggle}
-          >
-            Toggle Feed
-          </Button>
+          <FeedToggle handleFeedToggle={handleFeedToggle} />
         </Col>
-      </Row>
+      </Row >
     </Container >
   );
 }

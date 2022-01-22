@@ -6,25 +6,33 @@ $redText:#c23437;
 
 $greyText:#484d5b;
 
+$purple: #5D45DC;
+
 .orderBookContainer{
-    background-color: #131723;
+    max-width: 340px;
     color:rgba(186,186,186,1.00);
     font-family: Iosevka Custom,monospace;
+    font-weight: bold;
+    font-size: smaller;
     text-align: center;
-    min-width: 500px;
     height:100vw;
+}
+
+.orderBookTitle{
+    text-align: left;
+    position:relative;
+    top:-6px;
 }
 
 .orderBookHeader{
     min-width: 300px;
     font-weight: bold;
     color: $greyText;
-    border-top: 2px solid $greyText;
+    border-top: 1px solid $greyText;
     border-bottom: 1px solid $greyText;
 }
 
 .orderBookRow{
-    height: 18px;
     position: relative;
     z-index: 2;
     min-width: 300px;
@@ -43,54 +51,46 @@ $greyText:#484d5b;
         color:$redText;
     }
     font-weight: bold;
-    text-align: left;
     position: relative;
+    text-align: right;
     z-index: 2;
-}
-
-.spreadRow{
-
+    z-index: 2;
 }
 
 .spread{
     color:#484d5b;
-    border-top: 1px solid $greyText;
-    border-bottom: 1px solid $greyText;
     height: 30px;
+    position:relative;
+    top:4px;
 }
 
 .noConnection{
     color:#484d5b;
-    border-top: 1px solid $greyText;
+    // border-top: 1px solid $greyText;
     border-bottom: 1px solid $greyText;
     height: 30px;
+    position:relative;
+    top:4px;
 }
 
-.orderRowBackground{
-    z-index: 1;
-    position: relative;
-    top: -21px;
-    height: 18px;
-}
-
-.redRow{
-    background: $redBackground;
-}
-
-.greenRow{
-    background: $greenBackground;
-}
-
-.settingsLabel{
+.settingsLabelCol{
     text-align: right;
 }
 
+.settingsInputCol{
+    text-align: center;
+}
+
 .settingsInput{
+    width: 100%;
+}
+
+.settingsValueCol{
     text-align: left;
 }
 
 .toggleButton{
-    background-color:#5D45DC;
+    background-color:$purple;
     border:0;
     -webkit-transition: opacity 0.15s ease-in-out;
     -moz-transition: opacity 0.15s ease-in-out;
@@ -101,13 +101,48 @@ $greyText:#484d5b;
 
     &:hover{
         border:0;
-        background-color:#5D45DC;
+        background-color:$purple;
         opacity: 0.8;
     }
 
     &:focus{
         border:0;
-        background-color:#5D45DC;
+        background-color:$purple;
         opacity: 0.8;
     }
+}
+
+.bidsHeader{
+    display: none;
+}
+
+.responsiveAskRows{
+    flex-direction: column !important;
+    display: flex !important;
+}
+
+@media (min-width:768px){
+    .bidsHeader{
+        display: flex;
+    }
+
+    .responsiveAskRows{
+        flex-direction: column-reverse !important;
+        display: flex !important;
+    }
+
+    .orderBookContainer{
+        max-width: 700px;
+    }
+
+    .orderBookTitle{
+        text-align: left;
+        position:relative;
+        top:24px;
+    }
+}
+
+:export {
+    greenBackground: $greenBackground;
+    redBackground: $redBackground;
 }

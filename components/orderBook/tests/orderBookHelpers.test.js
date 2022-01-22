@@ -1,6 +1,6 @@
 import { addCumulativeVolumes, addVolumePercentage } from '../orderBookHelpers';
 import Order from '../models/Order';
-import { OrderType } from '../models/enums';
+import { OrderType } from '../models/OrderType';
 
 const depth = 7;
 
@@ -41,17 +41,18 @@ describe('addCumulativeVolumes', () => {
             });
         });
 
-        it('returns the Orders with cumulativeVolume greated then 0', () => {
-            resultForAsks.forEach((order) => {
-                expect(order.cumulativeVolume).toBeGreaterThan(0);
-            });
-        });
-
         it('returns the Orders with correct cumulativeVolume for descending cumulative volume', () => {
 
             expectedCumulativeVolumesAsks.forEach(expected => {
                 const order = resultForAsks.find(o => o.price === expected.price);
                 expect(order.cumulativeVolume).toBe(expected.cumulativeVolume);
+            });
+        });
+
+        it('returns the Orders with cumulativeVolume greated then 0', () => {
+            resultForAsks.forEach((order, i) => {
+                if (i > 0)
+                    expect(order.cumulativeVolume).toBeGreaterThan(0);
             });
         });
 

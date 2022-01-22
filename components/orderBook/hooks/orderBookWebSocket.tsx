@@ -1,4 +1,4 @@
-import WebSockerEvent from "../models/WebSocketEvent";
+import WebSocketEvent from "../models/WebSocketEvent";
 
 class OrderBookWebSocket {
     private url: string;
@@ -18,7 +18,7 @@ class OrderBookWebSocket {
         if ((!this.ws || (this.ws.readyState !== WebSocket.OPEN && this.ws.readyState !== WebSocket.CONNECTING)) && document.hasFocus()) {
             this.ws = new WebSocket(this.url);
             this.ws.onopen = (event) => {
-                const subEvent = new WebSockerEvent("subscribe", this.productId);
+                const subEvent = new WebSocketEvent("subscribe", this.productId);
                 this.ws.send(subEvent.toString());
                 console.log('WS connection opened')
             };
@@ -32,8 +32,10 @@ class OrderBookWebSocket {
     }
 
     public close = () => {
-        const unsubEvent = new WebSockerEvent("unsubscribe", this.productId);
-        this.ws.send(unsubEvent.toString())
+        if (this.ws.readyState !== WebSocket.CONNECTING) {
+            const unsubEvent = new WebSocketEvent("unsubscribe", this.productId);
+            this.ws.send(unsubEvent.toString())
+        }
         this.ws.close();
         console.log('WS connection closed')
     }
