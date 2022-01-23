@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useInterval from "./useInterval";
 
-export default function useThrottleTick(throttleInterval: number) {
+const useThrottleTick = (throttleInterval: number) => {
     const [throttleTick, setThrottleTick] = useState(false);
     useInterval(() => {
         setThrottleTick(!throttleTick);
@@ -9,3 +9,5 @@ export default function useThrottleTick(throttleInterval: number) {
 
     return throttleTick;
 }
+
+export default useThrottleTick;

@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import styles from '../OrderBook.module.scss'
 
+//todo move handlers to root
 const OrderBookSettings = ({ depth, setDepth, renderThrottleInterval, setRenderThrottleInterval }) => {
     return <>
         <Row>
@@ -10,6 +11,7 @@ const OrderBookSettings = ({ depth, setDepth, renderThrottleInterval, setRenderT
             </Col>
             <Col xs="4" className={styles.settingsInputCol}>
                 <input
+                    id="depth"
                     className={styles.settingsInput}
                     value={depth}
                     onChange={(e) => setDepth(e.target.value)}
@@ -28,6 +30,7 @@ const OrderBookSettings = ({ depth, setDepth, renderThrottleInterval, setRenderT
             </Col>
             <Col xs="4" className={styles.settingsInputCol}>
                 <input
+                    id="renderThrottle"
                     className={styles.settingsInput}
                     value={renderThrottleInterval}
                     onChange={(e) => setRenderThrottleInterval(e.target.value)}

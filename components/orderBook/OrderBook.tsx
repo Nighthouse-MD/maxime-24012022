@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
-import { Row, Col, Container, Modal, Button } from 'react-bootstrap';
+import { useState, useMemo } from 'react';
+import { Row, Col, Container } from 'react-bootstrap';
 import styles from './OrderBook.module.scss'
 
 import OrderRow from './subcomponents/OrderRow';
@@ -10,19 +10,18 @@ import FeedToggle from './subcomponents/FeedToggle';
 import Order from './models/Order';
 
 import { orderByPropertyNameDesc } from '../../tools/orderBy';
-import { addCumulativeVolumes, addVolumePercentage, calculateSpreadInfo } from './orderBookHelpers';
+import { addCumulativeVolumes, addVolumePercentage, calculateSpreadInfo } from './OrderBookHelpers';
 
-import useOrderBookWebSocket from './hooks/useOrderBookWebSocket';
-import useThrottleTick from './hooks/useThrottleTick';
+import Hooks from './hooks';
+import CommonHooks from '../common/hooks';
 import OrderType from './models/OrderType';
 import ReconnectModal from './subcomponents/ReconnectModal';
 
-export default function OrderBook() {
-  const [depth, setDepth] = useState<number>(15);
-  const [renderThrottleInterval, setRenderThrottleInterval] = useState<number>(350);
-
-  const throttleTick = useThrottleTick(renderThrottleInterval);
-  const { wasDisconnected, reconnectHandler, asks, bids, pair, handleFeedToggle } = useOrderBookWebSocket();
+const OrderBook = ({ defaultDepth, throttle }: Props) => {
+  const [depth, setDepth] = useState<number>(defaultDepth);
+  const [renderThrottleInterval, setRenderThrottleInterval] = useState<number>(throttle);
+  const throttleTick = CommonHooks.useThrottleTick(renderThrottleInterval);
+  const { asks, bids, pair, wasDisconnected, handleReconnect, handleFeedToggle } = Hooks.useOrderBookFeed();
 
   const throttledOrderBookRows = useMemo(
     () => {
@@ -32,6 +31,7 @@ export default function OrderBook() {
         </Row>;
 
       const composeOrderRows = () => {
+
         //order and take depth
         const asksToShow = orderByPropertyNameDesc(asks, 'price').slice(Math.max(asks.length - depth, 0));
         const bidsToShow = orderByPropertyNameDesc(bids, 'price').slice(0, depth);
@@ -43,7 +43,7 @@ export default function OrderBook() {
         const asksWithVolumes = addCumulativeVolumes(asksToShow, false, depth);
         const bidsWithVolumes = addCumulativeVolumes(bidsToShow, true, depth);
 
-        //get the biggest cumulative volume to define 100%
+        //get the biggest cumulative volume to define 100 %
         const biggestVolume = asksWithVolumes.length && bidsWithVolumes.length ? (asksWithVolumes[0].cumulativeVolume > bidsWithVolumes[bidsWithVolumes.length - 1].cumulativeVolume ?
           asksWithVolumes[0].cumulativeVolume :
           bidsWithVolumes[bidsWithVolumes.length - 1].cumulativeVolume) : 0;
@@ -100,7 +100,7 @@ export default function OrderBook() {
 
   return (
     <Container className={styles.orderBookContainer}>
-      <ReconnectModal show={wasDisconnected} handleClick={reconnectHandler} />
+      <ReconnectModal show={wasDisconnected} handleClick={handleReconnect} />
       <Row>
         <Col>
           <h2>{pair.substring(3)}</h2>
@@ -119,9 +119,9 @@ export default function OrderBook() {
       <hr />
       <br />
       <Row>
-        <div className={styles.orderBookTitle}>
+        <Col className={styles.orderBookTitle}>
           Order book
-        </div>
+        </Col>
       </Row>
       <Row>
         <Col >
@@ -137,3 +137,10 @@ export default function OrderBook() {
     </Container>
   );
 }
+
+interface Props {
+  defaultDepth: number;
+  throttle: number;
+}
+
+export default OrderBook;

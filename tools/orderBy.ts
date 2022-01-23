@@ -35,7 +35,6 @@ function compare(a, b) {
         return 1;
     }
 
-    // the're the same yo
     return 0;
 }
 

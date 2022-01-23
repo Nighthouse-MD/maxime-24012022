@@ -1,11 +1,11 @@
-import { addCumulativeVolumes, addVolumePercentage } from '../orderBookHelpers';
+import { addCumulativeVolumes, addVolumePercentage, calculateSpreadInfo } from '../OrderBookHelpers';
 import Order from '../models/Order';
 import OrderType from '../models/OrderType';
 
-const depth = 7;
-
 describe('addCumulativeVolumes', () => {
     describe('for asks', () => {
+        const depth = 7;
+
         const askOrders = [
             new Order(OrderType.ask, 16, 3),
             new Order(OrderType.ask, 15, 3),
@@ -65,6 +65,8 @@ describe('addCumulativeVolumes', () => {
     });
 
     describe('for bids', () => {
+        const depth = 7;
+
         const bidOrders = [
             new Order(OrderType.bid, 9, 3),
             new Order(OrderType.bid, 8, 3),
@@ -122,8 +124,9 @@ describe('addCumulativeVolumes', () => {
     });
 });
 
-
 describe('addVolumePercentage', () => {
+    const depth = 7;
+
     const askOrders = [
         new Order(OrderType.ask, 16, 3),
         new Order(OrderType.ask, 15, 3),
@@ -171,8 +174,6 @@ describe('addVolumePercentage', () => {
         asksWithCVolume[0].cumulativeVolume > bidsWithCVolume[bidsWithCVolume.length - 1].cumulativeVolume ?
             asksWithCVolume[0].cumulativeVolume :
             bidsWithCVolume[bidsWithCVolume.length - 1].cumulativeVolume;
-
-    console.log('Largest: ' + largestCumulativeTestVolume);
 
     describe('for asks', () => {
         const resultsWithCPercentage = addVolumePercentage(asksWithCVolume, largestCumulativeTestVolume);
@@ -233,6 +234,85 @@ describe('addVolumePercentage', () => {
                 const order = resultsWithCPercentage.find(o => o.price === expected.price);
                 expect(order.volumePercentage).toBe(expected.volumePercentage);
             });
+        });
+    });
+});
+
+describe('calculateSpreadInfo', () => {
+    describe('When no valid data is passed', () => {
+        it('returns a Spread object with zero numbers', () => {
+            const result = calculateSpreadInfo(null, undefined);
+            expect(result.amount).toBe(0);
+            expect(result.percent).toBe(0);
+        });
+    });
+
+    describe('When two empty lists are passed', () => {
+        it('returns a Spread object with zero numbers', () => {
+            const result = calculateSpreadInfo([], []);
+            expect(result.amount).toBe(0);
+            expect(result.percent).toBe(0);
+        });
+    });
+
+    describe('When on empty list and one valid list is passed', () => {
+        it('returns a Spread object with zero numbers', () => {
+            const asks = [];
+
+            const bids = [
+                new Order(OrderType.bid, 13, 3),
+                new Order(OrderType.bid, 12, 3),
+                new Order(OrderType.bid, 10, 3)
+            ];
+
+            const result = calculateSpreadInfo(asks, bids);
+            expect(result.amount).toBe(0);
+            expect(result.percent).toBe(0);
+        });
+    });
+
+    describe('When two valid lists are passed', () => {
+        it('returns a Spread object with zero numbers', () => {
+
+            const asks = [
+                new Order(OrderType.ask, 30, 3),
+                new Order(OrderType.ask, 29, 3),
+                new Order(OrderType.ask, 28, 3),
+                new Order(OrderType.ask, 27, 3),
+                new Order(OrderType.ask, 26, 3),
+                new Order(OrderType.ask, 25, 3),
+                new Order(OrderType.ask, 24, 3),
+                new Order(OrderType.ask, 23, 3),
+                new Order(OrderType.ask, 22, 3),
+                new Order(OrderType.ask, 21, 3),
+                new Order(OrderType.ask, 20, 3),
+                new Order(OrderType.ask, 19, 3),
+                new Order(OrderType.ask, 18, 3),
+                new Order(OrderType.ask, 17, 3),
+                new Order(OrderType.ask, 16, 3)
+            ];
+
+            const bids = [
+                new Order(OrderType.bid, 15, 3),
+                new Order(OrderType.bid, 14, 3),
+                new Order(OrderType.bid, 13, 3),
+                new Order(OrderType.bid, 12, 3),
+                new Order(OrderType.bid, 11, 3),
+                new Order(OrderType.bid, 10, 3),
+                new Order(OrderType.bid, 9, 3),
+                new Order(OrderType.bid, 8, 3),
+                new Order(OrderType.bid, 7, 3),
+                new Order(OrderType.bid, 6, 6),
+                new Order(OrderType.bid, 5, 3),
+                new Order(OrderType.bid, 4, 3),
+                new Order(OrderType.bid, 3, 3),
+                new Order(OrderType.bid, 2, 3),
+                new Order(OrderType.bid, 1, 3)
+            ];
+
+            const result = calculateSpreadInfo(asks, bids);
+            expect(result.amount).toBe(1);
+            expect(result.percent).toBe(6.67);
         });
     });
 });

@@ -29,7 +29,7 @@ const addVolumePercentage = (orderList: Order[], biggestCumulativeVolume: number
 }
 
 const calculateSpreadInfo = (asks: Order[], bids: Order[]): Spread => {
-    if (!asks.length || !bids.length)
+    if (!asks || !bids || !asks.length || !bids.length)
         return new Spread(0, 0);
 
     const lowestAsk = asks[asks.length - 1].price;

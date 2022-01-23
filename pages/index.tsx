@@ -1,7 +1,12 @@
 import OrderBook from '../components/orderBook/OrderBook';
 
-export default function OrderBookPage() {
+const OrderBookPage = () => {
   return (
-    <OrderBook />
+    <OrderBook
+      defaultDepth={15}
+      throttle={350}
+    />
   )
 }
+
+export default OrderBookPage;

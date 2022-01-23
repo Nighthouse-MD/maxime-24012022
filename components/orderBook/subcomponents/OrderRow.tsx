@@ -9,9 +9,9 @@ import { useMediaQuery } from 'react-responsive'
 const OrderRow = ({ price, quantity, cumulativeVolume, volumePercentage, type }: OrderRowProps) => {
     const isSmallScreen = useMediaQuery({ query: '(max-width: 768px)' })
     const gradientDirection = isSmallScreen ? 'right' : type === OrderType.ask ? 'right' : 'left';
-    const dynamicRowStyle = { background: `linear-gradient(to ${gradientDirection}, ${type === OrderType.ask ? styles.redBackground : styles.greenBackground} ${volumePercentage}%, transparent 0)` };
+    const dynamicBackgroundStyle = `linear-gradient(to ${gradientDirection}, ${type === OrderType.ask ? styles.redBackground : styles.greenBackground} ${volumePercentage}%, transparent 0)`;
 
-    return <Row className={styles.orderBookRow} style={dynamicRowStyle}>
+    return <Row className={styles.orderBookRow} style={{ background: dynamicBackgroundStyle }}>
         <OrderRowNumbers
             type={type}
             price={price}

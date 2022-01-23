@@ -1,6 +1,7 @@
-import WebSocketEvent from "../models/WebSocketEvent";
+import WebSocketOutMessage from "./WebSocketOutMessage";
+import Constants from "../../../Constants";
 
-class OrderBookWebSocket {
+export default class OrderBookWebSocket {
     private url: string;
     private productId: string;
     private ws: WebSocket;
@@ -17,8 +18,8 @@ class OrderBookWebSocket {
     public init = () => {
         if (!this.ws || (this.ws.readyState !== WebSocket.OPEN && this.ws.readyState !== WebSocket.CONNECTING)) {
             this.ws = new WebSocket(this.url);
-            this.ws.onopen = (event) => {
-                const subEvent = new WebSocketEvent("subscribe", this.productId);
+            this.ws.onopen = () => {
+                const subEvent = new WebSocketOutMessage("subscribe", this.productId, Constants.WEBSOCKET_FEED);
                 this.ws.send(subEvent.toString());
                 console.log('WS connection opened')
             };
@@ -31,14 +32,10 @@ class OrderBookWebSocket {
         }
     }
 
-    public setProductId = (productId: string) => {
-        this.productId = productId;
-    }
-
     public close = () => {
         if (this.ws && this.ws.readyState !== WebSocket.CLOSED && this.ws.readyState !== WebSocket.CLOSING) {
             if (this.ws.readyState !== WebSocket.CONNECTING) {
-                const unsubEvent = new WebSocketEvent("unsubscribe", this.productId);
+                const unsubEvent = new WebSocketOutMessage("unsubscribe", this.productId, Constants.WEBSOCKET_FEED);
                 this.ws.send(unsubEvent.toString())
             }
             this.ws.close();
@@ -47,4 +44,3 @@ class OrderBookWebSocket {
     }
 }
 
-export default OrderBookWebSocket;

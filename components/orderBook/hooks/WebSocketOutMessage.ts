@@ -1,11 +1,12 @@
-class WebSocketEvent {
+class WebSocketOutMessage {
     event: string;
-    feed: string = "book_ui_1";
+    feed: string;
     product_ids: string[];
 
-    constructor(event: string, productId: string) {
+    constructor(event: string, productId: string, feed: string) {
         this.product_ids = [productId];
         this.event = event;
+        this.feed = feed;
     }
 
     toString() {
@@ -13,4 +14,4 @@ class WebSocketEvent {
     }
 }
 
-export default WebSocketEvent;
+export default WebSocketOutMessage;
