@@ -1,9 +1,8 @@
 import { useState, useEffect, SetStateAction } from 'react';
 import Order from '../models/Order';
 import OrderType from '../models/OrderType';
-import Constants from '../Constants';
+import CONSTANTS from '../Constants';
 import OrderBookWebSocket from './OrderBookWebSocket';
-export const isBrowser = typeof window !== "undefined";
 
 const addOrdersToList = (orders: Order[], setList: { (value: SetStateAction<Order[]>): void; (value: SetStateAction<Order[]>): void; (arg0: (existingOrders: Order[]) => Order[]): void; }, renewList: boolean) => {
     setList((existingOrders: Order[]) => {
@@ -33,7 +32,6 @@ export default function useOrderBookWebSocket() {
         setPair(pair => pair === "PI_XBTUSD" ? "PI_ETHUSD" : "PI_XBTUSD")
     }
 
-    // if (isBrowser) {
     useEffect(() => {
         const onMessageHandler = (event) => {
             const eventData = JSON.parse(event.data);
@@ -41,8 +39,8 @@ export default function useOrderBookWebSocket() {
             if (!!eventData.asks && !!eventData.bids)
                 try {
                     const isSnapshotData = eventData.feed === "book_ui_1_snapshot";
-                    const newAsks = eventData.asks.map(ask => new Order(OrderType.ask, ask[0], ask[1]));
-                    const newBids = eventData.bids.map(bid => new Order(OrderType.bid, bid[0], bid[1]));
+                    const newAsks = eventData.asks.map((ask: number[]) => new Order(OrderType.ask, ask[0], ask[1]));
+                    const newBids = eventData.bids.map((bid: number[]) => new Order(OrderType.bid, bid[0], bid[1]));
 
                     addOrdersToList(newAsks, setAsks, isSnapshotData);
                     addOrdersToList(newBids, setBids, isSnapshotData);
@@ -51,7 +49,7 @@ export default function useOrderBookWebSocket() {
                 }
         };
 
-        const obws = new OrderBookWebSocket(Constants.WEBSOCKET_URL, pair, onMessageHandler);
+        const obws = new OrderBookWebSocket(CONSTANTS.WEBSOCKET_URL, pair, onMessageHandler);
 
         window.onblur = () => {
             obws.close();

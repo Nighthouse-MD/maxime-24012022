@@ -1,10 +1,8 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
-export const isBrowser = typeof window !== "undefined";
 
 function useInterval(callback: () => void, delay: number | null) {
     const savedCallback = useRef(callback)
 
-    // if (isBrowser)
     // Remember the latest callback if it changes.
     useLayoutEffect(() => {
         savedCallback.current = callback

@@ -1,14 +1,10 @@
-import '../styles/globals.scss'
-import Layout from '../components/layout'
-import SSRProvider from 'react-bootstrap/SSRProvider';
-import '../polyfills/subworkers';
+import '../styles/globals.scss';
+import Layout from '../components/layout';
 
 function MyApp({ Component, pageProps }) {
-  return <SSRProvider>
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  </SSRProvider>
+  return <Layout>
+    <Component {...pageProps} />
+  </Layout>
 }
 
 export default MyApp
