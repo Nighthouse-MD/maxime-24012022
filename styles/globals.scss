@@ -1,11 +1,13 @@
 @import "~bootstrap/scss/bootstrap";
 
+$backgroundBlue:#131723;
+
 html {
   // overflow-y: scroll;
 }
 
 body {
-  background-color: #131723;
+  background-color: $backgroundBlue;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,

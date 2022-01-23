@@ -15,7 +15,7 @@ class OrderBookWebSocket {
     }
 
     public init = () => {
-        if ((!this.ws || (this.ws.readyState !== WebSocket.OPEN && this.ws.readyState !== WebSocket.CONNECTING)) && document.hasFocus()) {
+        if (!this.ws || (this.ws.readyState !== WebSocket.OPEN && this.ws.readyState !== WebSocket.CONNECTING)) {
             this.ws = new WebSocket(this.url);
             this.ws.onopen = (event) => {
                 const subEvent = new WebSocketEvent("subscribe", this.productId);
@@ -31,13 +31,19 @@ class OrderBookWebSocket {
         }
     }
 
+    public setProductId = (productId: string) => {
+        this.productId = productId;
+    }
+
     public close = () => {
-        if (this.ws.readyState !== WebSocket.CONNECTING) {
-            const unsubEvent = new WebSocketEvent("unsubscribe", this.productId);
-            this.ws.send(unsubEvent.toString())
+        if (this.ws && this.ws.readyState !== WebSocket.CLOSED && this.ws.readyState !== WebSocket.CLOSING) {
+            if (this.ws.readyState !== WebSocket.CONNECTING) {
+                const unsubEvent = new WebSocketEvent("unsubscribe", this.productId);
+                this.ws.send(unsubEvent.toString())
+            }
+            this.ws.close();
+            console.log('WS connection closed')
         }
-        this.ws.close();
-        console.log('WS connection closed')
     }
 }
 

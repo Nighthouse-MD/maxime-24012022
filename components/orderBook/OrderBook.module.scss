@@ -8,6 +8,8 @@ $greyText:#484d5b;
 
 $purple: #5D45DC;
 
+$lighterBackgroundBlue:#2b3552;
+
 .orderBookContainer{
     max-width: 340px;
     color:rgba(186,186,186,1.00);
@@ -16,6 +18,21 @@ $purple: #5D45DC;
     font-size: smaller;
     text-align: center;
     height:100vw;
+}
+
+.reconnectModalContent {
+    background-color:$lighterBackgroundBlue;
+    color:rgba(186,186,186,1.00);
+    font-family: Iosevka Custom,monospace;
+    font-weight: bold;
+    text-align: center;
+}
+
+.reconnectModalBackdrop{
+    // opacity: 0.8 !important;
+}
+.modal-backdrop.show {
+    opacity: 0.8 !important;
 }
 
 .orderBookTitle{

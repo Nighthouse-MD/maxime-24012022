@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { Row, Col, Container } from 'react-bootstrap';
+import { useState, useMemo, useEffect } from 'react';
+import { Row, Col, Container, Modal, Button } from 'react-bootstrap';
 import styles from './OrderBook.module.scss'
 
 import OrderRow from './subcomponents/OrderRow';
@@ -15,13 +15,14 @@ import { addCumulativeVolumes, addVolumePercentage, calculateSpreadInfo } from '
 import useOrderBookWebSocket from './hooks/useOrderBookWebSocket';
 import useThrottleTick from './hooks/useThrottleTick';
 import OrderType from './models/OrderType';
+import ReconnectModal from './subcomponents/ReconnectModal';
 
 export default function OrderBook() {
   const [depth, setDepth] = useState<number>(15);
   const [renderThrottleInterval, setRenderThrottleInterval] = useState<number>(350);
 
   const throttleTick = useThrottleTick(renderThrottleInterval);
-  const { asks, bids, pair, handleFeedToggle } = useOrderBookWebSocket();
+  const { wasDisconnected, reconnectHandler, asks, bids, pair, handleFeedToggle } = useOrderBookWebSocket();
 
   const throttledOrderBookRows = useMemo(
     () => {
@@ -99,6 +100,7 @@ export default function OrderBook() {
 
   return (
     <Container className={styles.orderBookContainer}>
+      <ReconnectModal show={wasDisconnected} handleClick={reconnectHandler} />
       <Row>
         <Col>
           <h2>{pair.substring(3)}</h2>
@@ -131,7 +133,7 @@ export default function OrderBook() {
         <Col>
           <FeedToggle handleFeedToggle={handleFeedToggle} />
         </Col>
-      </Row >
-    </Container >
+      </Row>
+    </Container>
   );
 }

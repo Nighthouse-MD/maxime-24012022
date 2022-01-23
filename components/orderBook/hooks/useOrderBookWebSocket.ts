@@ -22,6 +22,9 @@ export default function useOrderBookWebSocket() {
     const [asks, setAsks] = useState<Order[]>([]);
     const [bids, setBids] = useState<Order[]>([]);
     const [pair, setPair] = useState<string>('PI_XBTUSD');
+    const [wasDisconnected, setWasDisconnected] = useState<boolean>(false);
+    const [initialLoadDone, setInitialLoadDone] = useState<boolean>(false);
+    const [reconnectHandler, setReconnectHandler] = useState<() => void>();
 
     const handleFeedToggle = (e) => {
         e.target.blur();
@@ -50,12 +53,24 @@ export default function useOrderBookWebSocket() {
 
         const obws = new OrderBookWebSocket(Constants.WEBSOCKET_URL, pair, onMessageHandler);
 
-        window.onfocus = () => obws.init();
-        window.onblur = () => obws.close();
-        window.onbeforeunload = () => obws.close();
+        window.onblur = () => {
+            obws.close();
+            setWasDisconnected(true);
+        }
+        window.onbeforeunload = () => {
+            obws.close();
+            setWasDisconnected(true);
+        }
+
+        const reconnect = () => {
+            obws.init();
+            setWasDisconnected(false);
+        }
+
+        setReconnectHandler(() => { return reconnect; });
 
         return () => obws.close();
     }, [pair]);
 
-    return { asks, bids, pair, handleFeedToggle };
+    return { wasDisconnected, reconnectHandler, asks, bids, pair, handleFeedToggle };
 }
