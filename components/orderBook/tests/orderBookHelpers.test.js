@@ -1,6 +1,6 @@
 import { addCumulativeVolumes, addVolumePercentage } from '../orderBookHelpers';
 import Order from '../models/Order';
-import { OrderType } from '../models/OrderType';
+import OrderType from '../models/OrderType';
 
 const depth = 7;
 
