@@ -2,11 +2,7 @@ import { useState, useEffect, SetStateAction } from 'react';
 import Order from '../models/Order';
 import OrderType from '../models/OrderType';
 import Constants from '../Constants';
-<<<<<<< HEAD
 import OrderBookWebSocket from './OrderBookWebSocket';
-=======
-import OrderBookWebSocket from './orderBookWebSocket';
->>>>>>> 2635e92b849628933d4c84050fb808fb4e8cf7d0
 export const isBrowser = typeof window !== "undefined";
 
 const addOrdersToList = (orders: Order[], setList: { (value: SetStateAction<Order[]>): void; (value: SetStateAction<Order[]>): void; (arg0: (existingOrders: Order[]) => Order[]): void; }, renewList: boolean) => {
@@ -62,8 +58,4 @@ export default function useOrderBookWebSocket() {
     }, [pair]);
 
     return { asks, bids, pair, handleFeedToggle };
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2635e92b849628933d4c84050fb808fb4e8cf7d0
