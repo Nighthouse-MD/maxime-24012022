@@ -2,7 +2,7 @@ import { useState, useEffect, SetStateAction } from 'react';
 import Order from '../models/Order';
 import OrderType from '../models/OrderType';
 import Constants from '../Constants';
-import OrderBookWebSocket from './OrderBookWebSocket';
+import OrderBookWebSocket from './orderBookWebSocket';
 export const isBrowser = typeof window !== "undefined";
 
 const addOrdersToList = (orders: Order[], setList: { (value: SetStateAction<Order[]>): void; (value: SetStateAction<Order[]>): void; (arg0: (existingOrders: Order[]) => Order[]): void; }, renewList: boolean) => {
