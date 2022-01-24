@@ -101,7 +101,7 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
     },
     [throttleTick]
   );
-
+  //todo remove substring from here
   return (
     <Container className={styles.orderBookContainer}>
       <ReconnectModal show={wasDisconnected} handleReconnect={handleReconnect} />
