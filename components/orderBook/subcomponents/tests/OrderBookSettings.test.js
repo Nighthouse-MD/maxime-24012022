@@ -4,9 +4,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 describe('OrderBookSettings', () => {
     it('shows all the elements', () => {
-        const handleSetDepth = jest.fn();
-        const handleSetRenderThrottleInterval = jest.fn();
-        render(<OrderBookSettings depth={15} setDepth={handleSetDepth} renderThrottleInterval={350} setRenderThrottleInterval={handleSetRenderThrottleInterval} />);
+        const handleDepthChange = jest.fn();
+        const handleThrottleIntervalChange = jest.fn();
+        render(<OrderBookSettings depth={15} handleDepthChange={handleDepthChange} throttleInterval={350} handleThrottleIntervalChange={handleThrottleIntervalChange} />);
 
         expect(screen.queryByText("Depth")).toBeInTheDocument();
         expect(screen.queryByText("Render throttle")).toBeInTheDocument();
@@ -18,24 +18,24 @@ describe('OrderBookSettings', () => {
     });
 
     it('fires the handlers when sliding', () => {
-        const handleSetDepth = jest.fn();
-        const handleSetRenderThrottleInterval = jest.fn();
-        render(<OrderBookSettings depth={15} setDepth={handleSetDepth} renderThrottleInterval={350} setRenderThrottleInterval={handleSetRenderThrottleInterval} />);
+        const handleDepthChange = jest.fn();
+        const handleThrottleIntervalChange = jest.fn();
+        render(<OrderBookSettings depth={15} handleDepthChange={handleDepthChange} throttleInterval={350} handleThrottleIntervalChange={handleThrottleIntervalChange} />);
 
         const sliders = screen.queryAllByRole('slider');
 
         sliders.forEach(slider => fireEvent.change(slider, { target: { value: 20 } }));
 
-        expect(handleSetDepth).toHaveBeenCalledTimes(1);
-        expect(handleSetRenderThrottleInterval).toHaveBeenCalledTimes(1);
+        expect(handleDepthChange).toHaveBeenCalledTimes(1);
+        expect(handleThrottleIntervalChange).toHaveBeenCalledTimes(1);
     });
 
     it('renders correctly for OrderType.bid', () => {
-        const handleSetDepth = jest.fn();
-        const handleSetRenderThrottleInterval = jest.fn();
+        const handleDepthChange = jest.fn();
+        const handleThrottleIntervalChange = jest.fn();
 
         const tree = renderer
-            .create(<OrderBookSettings depth={15} setDepth={handleSetDepth} renderThrottleInterval={350} setRenderThrottleInterval={handleSetRenderThrottleInterval} />)
+            .create(<OrderBookSettings depth={15} handleDepthChange={handleDepthChange} throttleInterval={350} handleThrottleIntervalChange={handleThrottleIntervalChange} />)
             .toJSON();
         expect(tree).toMatchSnapshot();
     });

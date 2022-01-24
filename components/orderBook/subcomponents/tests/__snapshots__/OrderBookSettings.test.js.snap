@@ -18,7 +18,7 @@ Array [
         id="depth"
         max="40"
         min="0"
-        onChange={[Function]}
+        onChange={[MockFunction]}
         type="range"
         value={15}
       />
@@ -45,7 +45,7 @@ Array [
         id="renderThrottle"
         max="2000"
         min="0"
-        onChange={[Function]}
+        onChange={[MockFunction]}
         type="range"
         value={350}
       />
