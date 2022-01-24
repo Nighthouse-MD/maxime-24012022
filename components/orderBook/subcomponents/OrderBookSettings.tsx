@@ -1,9 +1,9 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import styles from '../OrderBook.module.scss'
 
 //todo move handlers to root
-const OrderBookSettings = ({ depth, setDepth, renderThrottleInterval, setRenderThrottleInterval }) => {
+const OrderBookSettings = ({ depth, handleDepthChange, throttleInterval, handleThrottleIntervalChange }: Props) => {
     return <>
         <Row>
             <Col xs="4" className={styles.settingsLabelCol}>
@@ -14,7 +14,7 @@ const OrderBookSettings = ({ depth, setDepth, renderThrottleInterval, setRenderT
                     id="depth"
                     className={styles.settingsInput}
                     value={depth}
-                    onChange={(e) => setDepth(e.target.value)}
+                    onChange={handleDepthChange}
                     type="range"
                     min="0"
                     max="40"
@@ -32,18 +32,25 @@ const OrderBookSettings = ({ depth, setDepth, renderThrottleInterval, setRenderT
                 <input
                     id="renderThrottle"
                     className={styles.settingsInput}
-                    value={renderThrottleInterval}
-                    onChange={(e) => setRenderThrottleInterval(e.target.value)}
+                    value={throttleInterval}
+                    onChange={handleThrottleIntervalChange}
                     type="range"
                     min="0"
                     max="2000"
                 />
             </Col>
             <Col xs="4" className={styles.settingsValueCol}>
-                {renderThrottleInterval} ms
+                {throttleInterval} ms
             </Col>
         </Row>
     </>;
+}
+
+interface Props {
+    depth: number;
+    throttleInterval: number;
+    handleDepthChange: React.ChangeEventHandler<HTMLInputElement>;
+    handleThrottleIntervalChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 export default memo(OrderBookSettings);

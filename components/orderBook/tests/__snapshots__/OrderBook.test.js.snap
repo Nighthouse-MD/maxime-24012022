@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`When rendering the OrderBook component without a websocket connection renders correctly for OrderType.ask 1`] = `
+<div
+  className="orderBookContainer container"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col"
+    >
+      <h2>
+        XBTUSD
+      </h2>
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col"
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="settingsLabelCol col-4"
+        >
+          Depth
+        </div>
+        <div
+          className="settingsInputCol col-4"
+        >
+          <input
+            className="settingsInput"
+            id="depth"
+            max="40"
+            min="0"
+            onChange={[Function]}
+            type="range"
+            value={15}
+          />
+        </div>
+        <div
+          className="settingsValueCol col-4"
+        >
+          15
+        </div>
+      </div>
+      <div
+        className="row"
+      >
+        <div
+          className="settingsLabelCol col-4"
+        >
+          Render throttle
+        </div>
+        <div
+          className="settingsInputCol col-4"
+        >
+          <input
+            className="settingsInput"
+            id="renderThrottle"
+            max="2000"
+            min="0"
+            onChange={[Function]}
+            type="range"
+            value={350}
+          />
+        </div>
+        <div
+          className="settingsValueCol col-4"
+        >
+          350
+           ms
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <br />
+  <div
+    className="row"
+  >
+    <div
+      className="orderBookTitle col"
+    >
+      Order book
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col"
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="noConnection col"
+        >
+          No websocket connection
+        </div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div
+    className="row"
+  >
+    <div
+      className="col"
+    >
+      <button
+        className="toggleButton btn btn-primary btn-sm"
+        disabled={false}
+        id="toggleFeed"
+        name="toggleFeed"
+        onClick={[Function]}
+        type="button"
+      >
+        Toggle Feed
+      </button>
+    </div>
+  </div>
+</div>
+`;

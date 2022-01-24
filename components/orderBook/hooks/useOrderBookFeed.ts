@@ -21,19 +21,27 @@ const useOrderBookFeed = () => {
 
     useEffect(() => {
         const onMessageHandler = (event) => {
-            const eventData = JSON.parse(event.data);
+            try {
+                const eventData = JSON.parse(event.data);
 
-            if (!!eventData.asks && !!eventData.bids) {
-                const isSnapshotData = eventData.feed === CONSTANTS.WEBSOCKET_SNAPSHOT_FEED;
-                const newAsks = eventData.asks.map((ask: number[]) => new Order(OrderType.ask, ask[0], ask[1]));
-                const newBids = eventData.bids.map((bid: number[]) => new Order(OrderType.bid, bid[0], bid[1]));
+                if (!!eventData.asks && !!eventData.bids) {
+                    const isSnapshotData = eventData.feed === CONSTANTS.WEBSOCKET_SNAPSHOT_FEED;
+                    const newAsks = eventData.asks.map((ask: number[]) => new Order(OrderType.ask, ask[0], ask[1]));
+                    const newBids = eventData.bids.map((bid: number[]) => new Order(OrderType.bid, bid[0], bid[1]));
 
-                setAsks(existingAsks => addOrdersToList(existingAsks, newAsks, isSnapshotData));
-                setBids(existingBids => addOrdersToList(existingBids, newBids, isSnapshotData));
+                    setAsks(existingAsks => addOrdersToList(existingAsks, newAsks, isSnapshotData));
+                    setBids(existingBids => addOrdersToList(existingBids, newBids, isSnapshotData));
+                }
+            }
+            catch (event) {
+                console.log("There was an error with the websocket data parsing.");
+                setWasDisconnected(true);
             }
         };
 
-        const obws = new OrderBookWebSocket(CONSTANTS.WEBSOCKET_URL, pair, onMessageHandler);
+        const obws = new OrderBookWebSocket(CONSTANTS.WEBSOCKET_URL, pair, onMessageHandler, () => {
+            setWasDisconnected(true);
+        });
 
         window.onblur = () => {
             obws.close();

@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderBookHeader renders correctly for OrderType.ask 1`] = `
+<div
+  className="orderBookHeader  row"
+>
+  <div
+    className="price order-md-1 col"
+  >
+    PRICE
+  </div>
+  <div
+    className="quantity order-md-2 col"
+  >
+    SIZE
+  </div>
+  <div
+    className="quantity order-md-3 col"
+  >
+    TOTAL
+  </div>
+</div>
+`;
+
+exports[`OrderBookHeader renders correctly for OrderType.bid 1`] = `
+<div
+  className="orderBookHeader bidsHeader row"
+>
+  <div
+    className="price order-md-3 col"
+  >
+    PRICE
+  </div>
+  <div
+    className="quantity order-md-2 col"
+  >
+    SIZE
+  </div>
+  <div
+    className="quantity order-md-1 col"
+  >
+    TOTAL
+  </div>
+</div>
+`;

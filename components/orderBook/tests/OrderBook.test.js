@@ -1,6 +1,6 @@
 import React from 'react';
+import renderer from 'react-test-renderer';
 import { render, screen } from '@testing-library/react';
-import { } from '@testing-library/react-hooks'
 import { jest } from '@jest/globals'
 
 import OrderBook from '../OrderBook';
@@ -46,7 +46,7 @@ const bids = [
 
 describe('When rendering the OrderBook component', () => {
     describe('without a websocket connection', () => {
-        it('shows the OrderBook title, Depth, Render throttle and Toggle Feed elements', async () => {
+        it('shows the OrderBook title, Depth, Render throttle and Toggle Feed elements', () => {
             render(<OrderBook defaultDepth={15} throttle={350} />);
 
             // query* functions will return the element or null if it cannot be found
@@ -62,16 +62,23 @@ describe('When rendering the OrderBook component', () => {
             expect(screen.queryByText('Spread')).not.toBeInTheDocument();
         });
 
-        it('Shows the No websocket connection made', async () => {
+        it('shows the No websocket connection', () => {
             render(<OrderBook defaultDepth={15} throttle={350} />);
 
             expect(screen.queryByText('No websocket connection')).not.toBeNull();
+        });
+
+        it('renders correctly for OrderType.ask', () => {
+            const tree = renderer
+                .create(<OrderBook defaultDepth={15} throttle={350} />)
+                .toJSON();
+            expect(tree).toMatchSnapshot();
         });
     });
 
 
     describe('with a websocket connection', () => {
-        it('shows the OrderBook title, Depth, Render throttle and Toggle Feed elements', async () => {
+        it('shows the OrderBook title, Depth, Render throttle and Toggle Feed elements', () => {
             jest.spyOn(hooks, "useOrderBookFeed").mockImplementation(() => {
                 return {
                     wasDisconnected: false,
@@ -95,7 +102,7 @@ describe('When rendering the OrderBook component', () => {
         });
 
 
-        it('does not show the No websocket connection made', async () => {
+        it('does not show the No websocket connection made', () => {
             jest.spyOn(hooks, "useOrderBookFeed").mockImplementation(() => {
                 return {
                     wasDisconnected: false,
@@ -112,7 +119,7 @@ describe('When rendering the OrderBook component', () => {
             expect(screen.queryByText('No websocket connection')).not.toBeInTheDocument();
         });
 
-        it('shows all expected rows and headers', async () => {
+        it('shows all expected rows and headers', () => {
             jest.spyOn(hooks, "useOrderBookFeed").mockImplementation(() => {
                 return {
                     wasDisconnected: false,
@@ -136,7 +143,7 @@ describe('When rendering the OrderBook component', () => {
             bids.forEach(bid => expect(screen.queryAllByText(bid.price.toFixed(2).toLocaleString()).length).toBeGreaterThan(0));
         });
 
-        it('shows the reconnect modal when the websocket says it disconnects', async () => {
+        it('shows the reconnect modal when the websocket says it disconnects', () => {
             jest.spyOn(hooks, "useOrderBookFeed").mockImplementation(() => {
                 return {
                     wasDisconnected: true,

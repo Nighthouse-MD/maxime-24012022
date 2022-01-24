@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderBookSettings renders correctly for OrderType.bid 1`] = `
+Array [
+  <div
+    className="row"
+  >
+    <div
+      className="settingsLabelCol col-4"
+    >
+      Depth
+    </div>
+    <div
+      className="settingsInputCol col-4"
+    >
+      <input
+        className="settingsInput"
+        id="depth"
+        max="40"
+        min="0"
+        onChange={[Function]}
+        type="range"
+        value={15}
+      />
+    </div>
+    <div
+      className="settingsValueCol col-4"
+    >
+      15
+    </div>
+  </div>,
+  <div
+    className="row"
+  >
+    <div
+      className="settingsLabelCol col-4"
+    >
+      Render throttle
+    </div>
+    <div
+      className="settingsInputCol col-4"
+    >
+      <input
+        className="settingsInput"
+        id="renderThrottle"
+        max="2000"
+        min="0"
+        onChange={[Function]}
+        type="range"
+        value={350}
+      />
+    </div>
+    <div
+      className="settingsValueCol col-4"
+    >
+      350
+       ms
+    </div>
+  </div>,
+]
+`;

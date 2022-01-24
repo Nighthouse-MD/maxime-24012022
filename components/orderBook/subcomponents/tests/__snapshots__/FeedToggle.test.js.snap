@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeedToggle renders correctly 1`] = `
+<button
+  className="toggleButton btn btn-primary btn-sm"
+  disabled={false}
+  id="toggleFeed"
+  name="toggleFeed"
+  onClick={[MockFunction]}
+  type="button"
+>
+  Toggle Feed
+</button>
+`;

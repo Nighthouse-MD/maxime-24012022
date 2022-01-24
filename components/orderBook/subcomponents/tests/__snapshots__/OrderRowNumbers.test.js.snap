@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderRowNumbers renders correctly for OrderType.ask 1`] = `
+Array [
+  <div
+    className="price red order-md-1 order-1 col"
+  >
+    <span
+      className="align-middle"
+    >
+      123
+    </span>
+  </div>,
+  <div
+    className="quantity order-md-2 order-2 col"
+  >
+    <span
+      className="align-middle"
+    >
+      234
+    </span>
+  </div>,
+  <div
+    className="quantity order-md-3 order-3 col"
+  >
+    <span
+      className="align-middle"
+    >
+      567
+    </span>
+  </div>,
+]
+`;
+
+exports[`OrderRowNumbers renders correctly for OrderType.bid 1`] = `
+Array [
+  <div
+    className="price green order-md-3 order-1 col"
+  >
+    <span
+      className="align-middle"
+    >
+      123
+    </span>
+  </div>,
+  <div
+    className="quantity order-md-2 order-2 col"
+  >
+    <span
+      className="align-middle"
+    >
+      234
+    </span>
+  </div>,
+  <div
+    className="quantity order-md-1 order-3 col"
+  >
+    <span
+      className="align-middle"
+    >
+      567
+    </span>
+  </div>,
+]
+`;

@@ -24,3 +24,13 @@ body::-webkit-scrollbar {
 * {
   box-sizing: border-box;
 }
+
+.errorContainer{
+  max-width: 340px;
+  color:rgba(186,186,186,1.00);
+  font-family: Iosevka Custom,monospace;
+  font-weight: bold;
+  font-size: smaller;
+  text-align: center;
+  height:100vw;
+}

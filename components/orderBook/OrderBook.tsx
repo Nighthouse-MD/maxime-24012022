@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
 import styles from './OrderBook.module.scss'
 
 import OrderRow from './subcomponents/OrderRow';
+import OrderRowNumbers from './subcomponents/OrderRowNumbers';
 import OrderBookSettings from './subcomponents/OrderBookSettings';
 import OrderBookHeader from './subcomponents/OrderBookHeader';
 import FeedToggle from './subcomponents/FeedToggle';
@@ -56,11 +57,14 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
         const mapToOrderRow = (o: Order) =>
           <OrderRow
             key={o.price}
-            price={o.price.toFixed(2).toLocaleString()}
-            quantity={o.quantity.toLocaleString()}
-            cumulativeVolume={o.cumulativeVolume.toLocaleString()}
-            volumePercentage={o.volumePercentage}
-            type={o.type} />;
+            type={o.type}
+            volumePercentage={o.volumePercentage}>
+            <OrderRowNumbers
+              type={o.type}
+              price={o.price.toFixed(2).toLocaleString()}
+              quantity={o.quantity.toLocaleString()}
+              cumulativeVolume={o.cumulativeVolume.toLocaleString()} />
+          </OrderRow>;
 
         const askComponents = asksWithVolumePercentage.map((o: Order) => mapToOrderRow(o));
         const bidComponents = bidsWithVolumePercantage.map((o: Order) => mapToOrderRow(o));
@@ -100,7 +104,7 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
 
   return (
     <Container className={styles.orderBookContainer}>
-      <ReconnectModal show={wasDisconnected} handleClick={handleReconnect} />
+      <ReconnectModal show={wasDisconnected} handleReconnect={handleReconnect} />
       <Row>
         <Col>
           <h2>{pair.substring(3)}</h2>
@@ -110,9 +114,9 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
         <Col>
           <OrderBookSettings
             depth={depth}
-            setDepth={setDepth}
-            renderThrottleInterval={renderThrottleInterval}
-            setRenderThrottleInterval={setRenderThrottleInterval}
+            handleDepthChange={useCallback((e) => setDepth(parseInt(e.target.value)), [])}
+            throttleInterval={renderThrottleInterval}
+            handleThrottleIntervalChange={useCallback((e) => setRenderThrottleInterval(parseInt(e.target.value)), [])}
           />
         </Col>
       </Row>

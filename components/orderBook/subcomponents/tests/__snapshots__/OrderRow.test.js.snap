@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderRow renders correctly for OrderType.ask 1`] = `
+<div
+  className="orderBookRow row"
+  style={
+    Object {
+      "background": "linear-gradient(to right, redBackground 43%, transparent 0)",
+    }
+  }
+>
+  <div>
+    TestChild
+  </div>
+</div>
+`;
+
+exports[`OrderRow renders correctly for OrderType.bid 1`] = `
+<div
+  className="orderBookRow row"
+  style={
+    Object {
+      "background": "linear-gradient(to left, greenBackground 43%, transparent 0)",
+    }
+  }
+>
+  <div>
+    TestChild
+  </div>
+</div>
+`;

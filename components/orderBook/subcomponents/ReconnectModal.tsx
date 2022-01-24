@@ -2,7 +2,7 @@ import { memo, MouseEventHandler } from 'react';
 import { Modal, Button, Container, Row, Col } from 'react-bootstrap';
 import styles from '../OrderBook.module.scss'
 
-const ReconnectModal = ({ show, handleClick }: Props) =>
+const ReconnectModal = ({ show, handleReconnect }: Props) =>
     <Modal
         show={show}
         centered
@@ -22,7 +22,7 @@ const ReconnectModal = ({ show, handleClick }: Props) =>
                         <Button
                             id="reconnect"
                             name="reconnect"
-                            onClick={handleClick}
+                            onClick={handleReconnect}
                             className={styles.toggleButton}
                             size="sm">
                             Reconnect
@@ -35,7 +35,7 @@ const ReconnectModal = ({ show, handleClick }: Props) =>
 
 interface Props {
     show: boolean;
-    handleClick: MouseEventHandler<HTMLButtonElement>;
+    handleReconnect: MouseEventHandler<HTMLButtonElement>;
 }
 
 export default memo(ReconnectModal);
