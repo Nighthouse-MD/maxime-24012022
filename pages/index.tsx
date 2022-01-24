@@ -23,7 +23,8 @@ const OrderBookPage = () => {
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={myErrorHandler}>
       <OrderBook
         defaultDepth={15}
-        throttle={350}
+        defaultThrottleInterval={350}
+        showDevTools
       />
     </ErrorBoundary>
   )

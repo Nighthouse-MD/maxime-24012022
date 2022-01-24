@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import styles from '../OrderBook.module.scss'
 
-//todo move handlers to root
 const OrderBookSettings = ({ depth, handleDepthChange, throttleInterval, handleThrottleIntervalChange }: Props) => {
     return <>
         <Row>

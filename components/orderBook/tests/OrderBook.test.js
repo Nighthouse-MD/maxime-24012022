@@ -47,17 +47,17 @@ const bids = [
 describe('When rendering the OrderBook component', () => {
     describe('without a websocket connection', () => {
         it('shows the OrderBook title, Depth, Render throttle and Toggle Feed elements', () => {
-            render(<OrderBook defaultDepth={15} throttle={350} />);
+            render(<OrderBook defaultDepth={15} throttle={350} showDevTools={false} />);
 
             // query* functions will return the element or null if it cannot be found
             // get* functions will return the element or throw an error if it cannot be found
             expect(screen.queryByText('XBTUSD')).toBeInTheDocument();
-            expect(screen.queryByText('Depth')).toBeInTheDocument();
-            expect(screen.queryByText('Render throttle')).toBeInTheDocument();
+            expect(screen.queryByText('Depth')).not.toBeInTheDocument();
+            expect(screen.queryByText('Render throttle')).not.toBeInTheDocument();
             expect(screen.queryByText('Toggle Feed')).toBeInTheDocument();
 
             expect(screen.queryByRole("button", { id: /toggleFeed/i })).toBeInTheDocument();
-            expect(screen.queryAllByRole('slider').length).toBe(2);
+            expect(screen.queryAllByRole('slider').length).toBe(0);
 
             expect(screen.queryByText('Spread')).not.toBeInTheDocument();
         });
@@ -70,7 +70,7 @@ describe('When rendering the OrderBook component', () => {
 
         it('renders correctly for OrderType.ask', () => {
             const tree = renderer
-                .create(<OrderBook defaultDepth={15} throttle={350} />)
+                .create(<OrderBook defaultDepth={15} throttle={350} showDevTools={false} />)
                 .toJSON();
             expect(tree).toMatchSnapshot();
         });
@@ -78,7 +78,7 @@ describe('When rendering the OrderBook component', () => {
 
 
     describe('with a websocket connection', () => {
-        it('shows the OrderBook title, Depth, Render throttle and Toggle Feed elements', () => {
+        it('shows the OrderBook title and Toggle Feed elements', () => {
             jest.spyOn(hooks, "useOrderBookFeed").mockImplementation(() => {
                 return {
                     wasDisconnected: false,
@@ -90,7 +90,30 @@ describe('When rendering the OrderBook component', () => {
                 };
             });
 
-            render(<OrderBook defaultDepth={15} throttle={350} />);
+            render(<OrderBook defaultDepth={15} throttle={350} showDevTools={false} />);
+
+            expect(screen.queryByText('XBTUSD')).toBeInTheDocument();
+            expect(screen.queryByText('Depth')).not.toBeInTheDocument();
+            expect(screen.queryByText('Render throttle')).not.toBeInTheDocument();
+            expect(screen.queryByText('Toggle Feed')).toBeInTheDocument();
+
+            expect(screen.getByRole("button", { id: /toggleFeed/i })).toBeInTheDocument();
+            expect(screen.queryAllByRole('slider').length).toBe(0);
+        });
+
+        it('shows the OrderBook Depth, Render throttle elements when showDevTools === true ', () => {
+            jest.spyOn(hooks, "useOrderBookFeed").mockImplementation(() => {
+                return {
+                    wasDisconnected: false,
+                    reconnectHandler: jest.fn(),
+                    asks: asks,
+                    bids: bids,
+                    pair: "PI_XBTUSD",
+                    handleFeedToggle: jest.fn()
+                };
+            });
+
+            render(<OrderBook defaultDepth={15} throttle={350} showDevTools={true} />);
 
             expect(screen.queryByText('XBTUSD')).toBeInTheDocument();
             expect(screen.queryByText('Depth')).toBeInTheDocument();
@@ -98,9 +121,8 @@ describe('When rendering the OrderBook component', () => {
             expect(screen.queryByText('Toggle Feed')).toBeInTheDocument();
 
             expect(screen.getByRole("button", { id: /toggleFeed/i })).toBeInTheDocument();
-            expect(screen.getAllByRole('slider').length).toBe(2);
+            expect(screen.queryAllByRole('slider').length).toBe(2);
         });
-
 
         it('does not show the No websocket connection made', () => {
             jest.spyOn(hooks, "useOrderBookFeed").mockImplementation(() => {
@@ -114,7 +136,7 @@ describe('When rendering the OrderBook component', () => {
                 };
             });
 
-            render(<OrderBook defaultDepth={15} throttle={350} />)
+            render(<OrderBook defaultDepth={15} throttle={350} showDevTools={false} />)
 
             expect(screen.queryByText('No websocket connection')).not.toBeInTheDocument();
         });
@@ -131,7 +153,7 @@ describe('When rendering the OrderBook component', () => {
                 };
             });
 
-            render(<OrderBook defaultDepth={15} throttle={350} />)
+            render(<OrderBook defaultDepth={15} throttle={350} showDevTools={false} />)
 
             expect(screen.queryAllByText('PRICE').length).toBe(2);
             expect(screen.queryAllByText('SIZE').length).toBe(2);
@@ -139,8 +161,8 @@ describe('When rendering the OrderBook component', () => {
 
             expect(screen.queryByText('Spread: 1.0 (6.67%)')).toBeInTheDocument();
 
-            asks.forEach(ask => expect(screen.queryAllByText(ask.price.toFixed(2).toLocaleString()).length).toBeGreaterThan(0));
-            bids.forEach(bid => expect(screen.queryAllByText(bid.price.toFixed(2).toLocaleString()).length).toBeGreaterThan(0));
+            asks.forEach(ask => expect(screen.queryAllByText(ask.price.toLocaleString(undefined, { minimumFractionDigits: 2 })).length).toBeGreaterThan(0));
+            bids.forEach(bid => expect(screen.queryAllByText(bid.price.toLocaleString(undefined, { minimumFractionDigits: 2 })).length).toBeGreaterThan(0));
         });
 
         it('shows the reconnect modal when the websocket says it disconnects', () => {
@@ -155,7 +177,7 @@ describe('When rendering the OrderBook component', () => {
                 };
             });
 
-            render(<OrderBook defaultDepth={15} throttle={350} />)
+            render(<OrderBook defaultDepth={15} throttle={350} showDevTools={false} />)
 
             expect(screen.queryByText('Websocket disconnected, click to reconnect')).toBeInTheDocument();
             expect(screen.queryByText("Reconnect")).toBeInTheDocument();

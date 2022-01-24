@@ -18,9 +18,9 @@ import CommonHooks from '../common/hooks';
 import OrderType from './models/OrderType';
 import ReconnectModal from './subcomponents/ReconnectModal';
 
-const OrderBook = ({ defaultDepth, throttle }: Props) => {
+const OrderBook = ({ defaultDepth, defaultThrottleInterval, showDevTools }: Props) => {
   const [depth, setDepth] = useState<number>(defaultDepth);
-  const [renderThrottleInterval, setRenderThrottleInterval] = useState<number>(throttle);
+  const [renderThrottleInterval, setRenderThrottleInterval] = useState<number>(defaultThrottleInterval);
   const throttleTick = CommonHooks.useThrottleTick(renderThrottleInterval);
   const { asks, bids, pair, wasDisconnected, handleReconnect, handleFeedToggle } = Hooks.useOrderBookFeed();
 
@@ -61,7 +61,7 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
             volumePercentage={o.volumePercentage}>
             <OrderRowNumbers
               type={o.type}
-              price={o.price.toFixed(2).toLocaleString()}
+              price={o.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               quantity={o.quantity.toLocaleString()}
               cumulativeVolume={o.cumulativeVolume.toLocaleString()} />
           </OrderRow>;
@@ -101,7 +101,10 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
     },
     [throttleTick]
   );
-  //todo remove substring from here
+
+  const handleDepthChangeCallback = useCallback((e) => setDepth(parseInt(e.target.value)), []);
+  const handleThrottleIntercalChangeCallback = useCallback((e) => setRenderThrottleInterval(parseInt(e.target.value)), []);
+
   return (
     <Container className={styles.orderBookContainer}>
       <ReconnectModal show={wasDisconnected} handleReconnect={handleReconnect} />
@@ -110,18 +113,20 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
           <h2>{pair.substring(3)}</h2>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <OrderBookSettings
-            depth={depth}
-            handleDepthChange={useCallback((e) => setDepth(parseInt(e.target.value)), [])}
-            throttleInterval={renderThrottleInterval}
-            handleThrottleIntervalChange={useCallback((e) => setRenderThrottleInterval(parseInt(e.target.value)), [])}
-          />
-        </Col>
-      </Row>
-      <hr />
-      <br />
+      {!showDevTools || <>
+        <Row>
+          <Col>
+            <OrderBookSettings
+              depth={depth}
+              handleDepthChange={handleDepthChangeCallback}
+              throttleInterval={renderThrottleInterval}
+              handleThrottleIntervalChange={handleThrottleIntercalChangeCallback}
+            />
+          </Col>
+        </Row>
+        <hr />
+        <br />
+      </>}
       <Row>
         <Col className={styles.orderBookTitle}>
           Order book
@@ -144,7 +149,8 @@ const OrderBook = ({ defaultDepth, throttle }: Props) => {
 
 interface Props {
   defaultDepth: number;
-  throttle: number;
+  defaultThrottleInterval: number;
+  showDevTools: boolean;
 }
 
 export default OrderBook;

@@ -39,9 +39,7 @@ const useOrderBookFeed = () => {
             }
         };
 
-        const obws = new OrderBookWebSocket(CONSTANTS.WEBSOCKET_URL, pair, onMessageHandler, () => {
-            setWasDisconnected(true);
-        });
+        const obws = new OrderBookWebSocket(CONSTANTS.WEBSOCKET_URL, pair, onMessageHandler);
 
         window.onblur = () => {
             obws.close();
