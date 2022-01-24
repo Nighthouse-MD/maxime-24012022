@@ -5,7 +5,9 @@ import OrderType from '../../models/OrderType';
 
 describe('OrderRow', () => {
     it('shows the correct order for OrderType.ask', () => {
-        const { container } = render(<OrderRow type={OrderType.ask} volumePercentage={43} children={<div>TestChild</div>} />);
+        const { container } = render(<OrderRow type={OrderType.ask} volumePercentage={43}>
+            <div>TestChild</div>
+        </OrderRow>);
         const theRow = container.getElementsByClassName("orderBookRow")[0];
 
         expect(theRow.className).toBe("orderBookRow row");
@@ -14,13 +16,17 @@ describe('OrderRow', () => {
 
     it('renders correctly for OrderType.ask', () => {
         const tree = renderer
-            .create(<OrderRow type={OrderType.ask} volumePercentage={43} children={<div>TestChild</div>} />)
+            .create(<OrderRow type={OrderType.ask} volumePercentage={43}>
+                <div>TestChild</div>
+            </OrderRow>)
             .toJSON();
         expect(tree).toMatchSnapshot();
     });
 
     it('shows the correct order for OrderType.bid', () => {
-        const { container } = render(<OrderRow type={OrderType.bid} volumePercentage={43} children={<div>TestChild</div>} />);
+        const { container } = render(<OrderRow type={OrderType.bid} volumePercentage={43}>
+            <div>TestChild</div>
+        </OrderRow>);
         const theRow = container.getElementsByClassName("orderBookRow")[0];
 
         expect(theRow.className).toBe("orderBookRow row");
@@ -29,7 +35,9 @@ describe('OrderRow', () => {
 
     it('renders correctly for OrderType.bid', () => {
         const tree = renderer
-            .create(<OrderRow type={OrderType.bid} volumePercentage={43} children={<div>TestChild</div>} />)
+            .create(<OrderRow type={OrderType.bid} volumePercentage={43}>
+                <div>TestChild</div>
+            </OrderRow>)
             .toJSON();
         expect(tree).toMatchSnapshot();
     });
