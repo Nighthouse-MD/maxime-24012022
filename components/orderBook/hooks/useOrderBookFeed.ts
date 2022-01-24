@@ -25,7 +25,7 @@ const useOrderBookFeed = () => {
                 const eventData = JSON.parse(event.data);
 
                 if (!!eventData.asks && !!eventData.bids) {
-                    const isSnapshotData = eventData.feed === CONSTANTS.WEBSOCKET_SNAPSHOT_FEED;
+                    const isSnapshotData = eventData.feed === CONSTANTS.WEBSOCKET_FEED_SNAPSHOT;
                     const newAsks = eventData.asks.map((ask: number[]) => new Order(OrderType.ask, ask[0], ask[1]));
                     const newBids = eventData.bids.map((bid: number[]) => new Order(OrderType.bid, bid[0], bid[1]));
 
